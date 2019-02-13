@@ -3,29 +3,67 @@ import "./App.css";
 import "./SearchForm/SearchForm";
 import SearchForm from "./SearchForm/SearchForm";
 
+import update from "immutability-helper";
+
 class App extends Component {
   constructor(props) {
     super(props);
+    this.fetchCityWeather = this.fetchCityWeather.bind(this);
+    this.parseWeatherData = this.parseWeatherData.bind(this);
     this.state = {
-      // NOTE: I do realize that this doesn't protect the API key from being viewed
+      // NOTE: I do realize that this doesn't protect the Api key from being viewed
       // client-side but at least it isn't stored in the public repository.
       owmApiKey: process.env.REACT_APP_OWM_API_KEY,
       units: "metric", // 'imperial' or 'metric'
-      weatherData: []
+      weatherData: {},
+      selectedCity: "" // cityId from OWM or boolean false, if city not found
     };
   }
 
-  render() {
+  /* 
+  Returns the OpenWeatherMap json-object for the city or boolean false if no
+  such city was found.
+  
+  params: name of the city and optionally the two letter country code.
+  */
+  fetchCityWeather(cityName, countryCode = "") {
     const { owmApiKey, units } = this.state;
-    fetch(
-      `http://api.openweathermap.org/data/2.5/weather?q=Inari&units=${units}&APPID=${owmApiKey}`
-    )
-      .then(res => res.json())
-      .then(json => console.log(json));
+    const baseApiUrl = `http://api.openweathermap.org/data/2.5/weather?APPID=${owmApiKey}&units=${units}`;
+    const cityQuery =
+      countryCode.length === 2 ? cityName + countryCode : cityName;
 
+    fetch(baseApiUrl + `&q=${cityQuery}`)
+      .then(res => res.json())
+      .then(json => {
+        console.log(json);
+        this.parseWeatherData(json);
+      });
+  }
+
+  /* 
+  Checks if a city was found and sets weatherData and selectedCity inside state
+  accordingly.
+
+  params: the json response from the OpenWeatherMap API
+  */
+  parseWeatherData(owmData) {
+    if (owmData.cod === "404") {
+      this.setState({ selectedCity: false });
+    } else {
+      const cityId = owmData.sys.id;
+      this.setState(prevState =>
+        update(prevState, {
+          weatherData: { [cityId]: { $set: owmData } },
+          selectedCity: { $set: cityId }
+        })
+      );
+    }
+  }
+
+  render() {
     return (
       <div className="App">
-        <SearchForm />
+        <SearchForm fetchCityWeather={this.fetchCityWeather} />
       </div>
     );
   }

@@ -6,26 +6,35 @@ export default class SearchForm extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.placeholderText = "E.g. Turku, FI";
-    this.state = { cityName: "" };
+    this.state = { cityQuery: "" };
   }
 
   handleChange(event) {
-    this.setState({ cityName: event.target.value });
+    this.setState({ cityQuery: event.target.value });
   }
 
   handleSubmit(event) {
     event.preventDefault();
-    console.log(this.state.cityName);
+    const { cityQuery } = this.state;
+    const { fetchCityWeather } = this.props;
+    const cityQueryArr = cityQuery.split(",");
+
+    if (cityQueryArr.length === 2) {
+      fetchCityWeather(cityQueryArr[0], cityQueryArr[1]);
+    }
+    fetchCityWeather(cityQueryArr[0]);
   }
 
   render() {
+    const { cityQuery } = this.state;
+
     return (
       <form onSubmit={this.handleSubmit}>
         <label>
           Search for a city:
           <input
             type="text"
-            value={this.state.cityName}
+            value={cityQuery}
             placeholder={this.placeholderText}
             onChange={this.handleChange}
           />
