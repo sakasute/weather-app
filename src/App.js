@@ -53,7 +53,7 @@ class App extends Component {
     if (owmData.cod === "404") {
       this.setState({ selectedCityId: false });
     } else {
-      const cityId = owmData.sys.id;
+      const cityId = owmData.id;
       this.setState(prevState =>
         update(prevState, {
           weatherData: { [cityId]: { $set: owmData } },
@@ -75,7 +75,9 @@ class App extends Component {
         mainContent = <InitialPage />;
         break;
       default:
-        mainContent = <CityPage data={weatherData[selectedCityId]} />;
+        mainContent = (
+          <CityPage data={weatherData[selectedCityId]} isFavourite={false} />
+        );
     }
 
     return (
