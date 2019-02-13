@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import "./App.css";
 import "./SearchForm/SearchForm";
+import CityNotFoundPage from "./CityNotFoundPage/CityNotFoundPage";
+import CityPage from "./CityPage/CityPage";
+import InitialPage from "./InitialPage/InitialPage";
 import SearchForm from "./SearchForm/SearchForm";
 
 import update from "immutability-helper";
@@ -16,7 +19,7 @@ class App extends Component {
       owmApiKey: process.env.REACT_APP_OWM_API_KEY,
       units: "metric", // 'imperial' or 'metric'
       weatherData: {},
-      selectedCity: "" // cityId from OWM or boolean false, if city not found
+      selectedCityId: "" // cityId from OWM or boolean false, if city not found
     };
   }
 
@@ -41,29 +44,44 @@ class App extends Component {
   }
 
   /* 
-  Checks if a city was found and sets weatherData and selectedCity inside state
+  Checks if a city was found and sets weatherData and selectedCityId inside state
   accordingly.
 
   params: the json response from the OpenWeatherMap API
   */
   parseWeatherData(owmData) {
     if (owmData.cod === "404") {
-      this.setState({ selectedCity: false });
+      this.setState({ selectedCityId: false });
     } else {
       const cityId = owmData.sys.id;
       this.setState(prevState =>
         update(prevState, {
           weatherData: { [cityId]: { $set: owmData } },
-          selectedCity: { $set: cityId }
+          selectedCityId: { $set: cityId }
         })
       );
     }
   }
 
   render() {
+    const { weatherData, selectedCityId } = this.state;
+    let mainContent;
+
+    switch (selectedCityId) {
+      case false:
+        mainContent = <CityNotFoundPage />;
+        break;
+      case "":
+        mainContent = <InitialPage />;
+        break;
+      default:
+        mainContent = <CityPage data={weatherData[selectedCityId]} />;
+    }
+
     return (
       <div className="App">
         <SearchForm fetchCityWeather={this.fetchCityWeather} />
+        {mainContent}
       </div>
     );
   }
