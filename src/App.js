@@ -171,14 +171,20 @@ class App extends Component {
         );
     }
 
+    const favouritesEl =
+      Object.keys(favourites).length > 0 ? (
+        <FavouritesList favourites={favourites} selectCity={this.selectCity} />
+      ) : (
+        <p className="info-text">
+          To add a favourite, search for a city first!
+        </p>
+      );
+
     return (
       <div className="content-wrapper">
         <aside className="sidebar card card--secondary">
           <h2 className="card__title">Favourites</h2>
-          <FavouritesList
-            favourites={favourites}
-            selectCity={this.selectCity}
-          />
+          {favouritesEl}
         </aside>
         <main className="main-content card">
           <SearchForm fetchCityWeather={this.fetchCityWeather} />

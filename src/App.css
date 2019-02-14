@@ -27,7 +27,7 @@ body {
   border: 1px hsl(0, 0%, 75%) solid;
   border-radius: 3px;
   box-shadow: hsl(0, 0%, 85%) 3px 3px 0px 0px;
-  padding: 1em;
+  padding: 1rem;
 }
 
 .card--secondary {
@@ -37,10 +37,19 @@ body {
 }
 
 .card__title {
-  margin: 0 0 1em 0;
+  margin: 0 0 1rem 0;
   font-weight: normal;
   font-size: 1.4rem;
   text-transform: uppercase;
+}
+
+.info-text {
+  margin: 1rem 0;
+  font-style: italic;
+}
+
+.info-text--center {
+  text-align: center;
 }
 
 @media (max-width: 35em) {

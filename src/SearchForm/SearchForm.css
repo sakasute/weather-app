@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-bottom: 2rem;
 }
 
 .search__label {
@@ -18,6 +19,7 @@
 }
 
 .search__btn {
+  cursor: pointer;
   background-color: var(--less-blue);
   border: 2px var(--very-blue) solid;
   border-radius: 3px;
