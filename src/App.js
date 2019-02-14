@@ -63,7 +63,6 @@ class App extends Component {
     fetch(baseApiUrl + `&q=${cityQuery}`)
       .then(res => res.json())
       .then(json => {
-        console.log(json);
         this.parseWeatherData(json);
       });
   }
@@ -75,7 +74,8 @@ class App extends Component {
   params: the json response from the OpenWeatherMap API
   */
   parseWeatherData(owmData) {
-    if (owmData.cod === "404") {
+    // 404 if no such city, 400 if bad request, mainly empty query
+    if (owmData.cod === "404" || owmData.cod === "400") {
       this.setState({ selectedCityId: false });
     } else {
       const cityId = owmData.id;
@@ -96,8 +96,8 @@ class App extends Component {
     const { weatherData } = this.state;
     const cityWeatherData = weatherData[cityId];
     if (typeof cityWeatherData === "undefined") {
-      // the data could be fetched using the cityId also but I didn't wanted to
-      // keep things simple and not add another function/modify the function.
+      // the data could be fetched using the cityId also but I wanted to
+      // keep things simple and not add another function/modify the fetch function.
       this.fetchCityWeather(cityName, countryCode);
     } else if (Date.now() - 1000 * cityWeatherData.dt > 3600000) {
       // if existing data is older than 60 min, fetch fresh data
