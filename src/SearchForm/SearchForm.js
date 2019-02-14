@@ -21,9 +21,9 @@ export default class SearchForm extends Component {
     const cityQueryArr = cityQuery.split(",");
 
     if (cityQueryArr.length === 2) {
-      fetchCityWeather(cityQueryArr[0], cityQueryArr[1]);
+      fetchCityWeather(cityQueryArr[0].trim(), cityQueryArr[1].trim());
     }
-    fetchCityWeather(cityQueryArr[0]);
+    fetchCityWeather(cityQueryArr[0].trim());
   }
 
   render() {

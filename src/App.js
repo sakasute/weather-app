@@ -59,7 +59,7 @@ class App extends Component {
     // adds country code to the query if it was given
     const cityQuery =
       countryCode.length === 2 ? `${cityName},${countryCode}` : cityName;
-
+    console.log(baseApiUrl + `&q=${cityQuery}`);
     fetch(baseApiUrl + `&q=${cityQuery}`)
       .then(res => res.json())
       .then(json => {
