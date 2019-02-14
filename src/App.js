@@ -173,7 +173,11 @@ class App extends Component {
 
     const favouritesEl =
       Object.keys(favourites).length > 0 ? (
-        <FavouritesList favourites={favourites} selectCity={this.selectCity} />
+        <FavouritesList
+          favourites={favourites}
+          selectCity={this.selectCity}
+          selectedCityId={selectedCityId}
+        />
       ) : (
         <p className="info-text">
           To add a favourite, search for a city first!
