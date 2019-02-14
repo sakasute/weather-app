@@ -9,17 +9,28 @@ import SearchForm from "./SearchForm/SearchForm";
 import update from "immutability-helper";
 
 class App extends Component {
+  /* 
+  Helper function to check if id-number is found in given object's keys
+  */
+  static checkIfIdIsKey(obj, id) {
+    return Object.keys(obj).includes(id.toString());
+  }
+
   constructor(props) {
     super(props);
+    this.addFavourite = this.addFavourite.bind(this);
     this.fetchCityWeather = this.fetchCityWeather.bind(this);
     this.parseWeatherData = this.parseWeatherData.bind(this);
+    this.removeFavourite = this.removeFavourite.bind(this);
+    this.toggleFavourite = this.toggleFavourite.bind(this);
     this.state = {
       // NOTE: I do realize that this doesn't protect the Api key from being viewed
       // client-side but at least it isn't stored in the public repository.
       owmApiKey: process.env.REACT_APP_OWM_API_KEY,
       units: "metric", // 'imperial' or 'metric'
       weatherData: {},
-      selectedCityId: "" // cityId from OWM or boolean false, if city not found
+      selectedCityId: "", // cityId from OWM or boolean false, if city not found
+      favourites: {}
     };
   }
 
@@ -63,8 +74,43 @@ class App extends Component {
     }
   }
 
+  toggleFavourite(cityId) {
+    const { favourites, weatherData } = this.state;
+    if (this.constructor.checkIfIdIsKey(favourites, cityId)) {
+      this.removeFavourite(cityId);
+    } else {
+      const cityData = weatherData[cityId];
+      const cityName = cityData.name;
+      const countryCode = cityData.sys.country;
+      this.addFavourite(cityId, cityName, countryCode);
+    }
+  }
+
+  addFavourite(cityId, cityName, countryCode) {
+    this.setState(prevState =>
+      update(prevState, {
+        favourites: {
+          [cityId]: {
+            $set: {
+              id: cityId,
+              name: cityName,
+              country: countryCode
+            }
+          }
+        }
+      })
+    );
+  }
+
+  removeFavourite(cityId) {
+    this.setState(prevState => {
+      delete prevState.favourites[cityId];
+      return prevState;
+    });
+  }
+
   render() {
-    const { weatherData, selectedCityId } = this.state;
+    const { favourites, selectedCityId, weatherData } = this.state;
     let mainContent;
 
     switch (selectedCityId) {
@@ -76,7 +122,14 @@ class App extends Component {
         break;
       default:
         mainContent = (
-          <CityPage data={weatherData[selectedCityId]} isFavourite={false} />
+          <CityPage
+            data={weatherData[selectedCityId]}
+            isFavourite={this.constructor.checkIfIdIsKey(
+              favourites,
+              selectedCityId
+            )}
+            toggleFavourite={this.toggleFavourite}
+          />
         );
     }
 

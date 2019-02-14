@@ -9,7 +9,11 @@ export default function CityPage({ data, isFavourite, toggleFavourite }) {
 
   return (
     <div>
-      <CityName isFavourite={isFavourite} toggleFavourite={toggleFavourite}>
+      <CityName
+        cityId={data.id}
+        isFavourite={isFavourite}
+        toggleFavourite={toggleFavourite}
+      >
         {cityName}
       </CityName>
       <h3>{tempStr} &deg;C</h3>
