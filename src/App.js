@@ -55,7 +55,7 @@ class App extends Component {
   */
   fetchCityWeather(cityName, countryCode = "") {
     const { owmApiKey, units } = this.state;
-    const baseApiUrl = `http://api.openweathermap.org/data/2.5/weather?APPID=${owmApiKey}&units=${units}`;
+    const baseApiUrl = `https://api.openweathermap.org/data/2.5/weather?APPID=${owmApiKey}&units=${units}`;
     // adds country code to the query if it was given
     const cityQuery =
       countryCode.length === 2 ? `${cityName},${countryCode}` : cityName;
