@@ -3,6 +3,7 @@ import "./App.css";
 import "./SearchForm/SearchForm";
 import CityNotFoundPage from "./CityNotFoundPage/CityNotFoundPage";
 import CityPage from "./CityPage/CityPage";
+import FavouritesList from "./FavouritesList/FavouritesList";
 import InitialPage from "./InitialPage/InitialPage";
 import SearchForm from "./SearchForm/SearchForm";
 
@@ -18,11 +19,14 @@ class App extends Component {
 
   constructor(props) {
     super(props);
-    this.addFavourite = this.addFavourite.bind(this);
     this.fetchCityWeather = this.fetchCityWeather.bind(this);
     this.parseWeatherData = this.parseWeatherData.bind(this);
+    this.selectCity = this.selectCity.bind(this);
+
+    this.addFavourite = this.addFavourite.bind(this);
     this.removeFavourite = this.removeFavourite.bind(this);
     this.toggleFavourite = this.toggleFavourite.bind(this);
+
     this.state = {
       // NOTE: I do realize that this doesn't protect the Api key from being viewed
       // client-side but at least it isn't stored in the public repository.
@@ -43,8 +47,9 @@ class App extends Component {
   fetchCityWeather(cityName, countryCode = "") {
     const { owmApiKey, units } = this.state;
     const baseApiUrl = `http://api.openweathermap.org/data/2.5/weather?APPID=${owmApiKey}&units=${units}`;
+    // adds country code to the query if it was given
     const cityQuery =
-      countryCode.length === 2 ? cityName + countryCode : cityName;
+      countryCode.length === 2 ? `${cityName},${countryCode}` : cityName;
 
     fetch(baseApiUrl + `&q=${cityQuery}`)
       .then(res => res.json())
@@ -68,6 +73,29 @@ class App extends Component {
       this.setState(prevState =>
         update(prevState, {
           weatherData: { [cityId]: { $set: owmData } },
+          selectedCityId: { $set: cityId }
+        })
+      );
+    }
+  }
+
+  /* 
+  Marks the given city as selected. Doesn't fetch data if recent enough data
+  available.
+  */
+  selectCity(cityId, cityName, countryCode) {
+    const { weatherData } = this.state;
+    const cityWeatherData = weatherData[cityId];
+    if (typeof cityWeatherData === "undefined") {
+      // the data could be fetched using the cityId also but I didn't wanted to
+      // keep things simple and not add another function/modify the function.
+      this.fetchCityWeather(cityName, countryCode);
+    } else if (Date.now() - 1000 * cityWeatherData.dt > 3600000) {
+      // if existing data is older than 60 min, fetch fresh data
+      this.fetchCityWeather(cityName, countryCode);
+    } else {
+      this.setState(prevState =>
+        update(prevState, {
           selectedCityId: { $set: cityId }
         })
       );
@@ -135,8 +163,17 @@ class App extends Component {
 
     return (
       <div className="App">
-        <SearchForm fetchCityWeather={this.fetchCityWeather} />
-        {mainContent}
+        <h2>Favourites</h2>
+        <aside>
+          <FavouritesList
+            favourites={favourites}
+            selectCity={this.selectCity}
+          />
+        </aside>
+        <main>
+          <SearchForm fetchCityWeather={this.fetchCityWeather} />
+          {mainContent}
+        </main>
       </div>
     );
   }
