@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import "./SearchForm.css";
 
 export default class SearchForm extends Component {
   constructor(props) {
@@ -29,17 +30,18 @@ export default class SearchForm extends Component {
     const { cityQuery } = this.state;
 
     return (
-      <form onSubmit={this.handleSubmit}>
-        <label>
+      <form className="search" onSubmit={this.handleSubmit}>
+        <label className="card__title search__label">
           Search for a city:
           <input
+            className="search__text-field"
             type="text"
             value={cityQuery}
             placeholder={this.placeholderText}
             onChange={this.handleChange}
           />
         </label>
-        <input type="submit" value="Go" />
+        <input className="search__btn" type="submit" value="GO!" />
       </form>
     );
   }

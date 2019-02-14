@@ -172,15 +172,15 @@ class App extends Component {
     }
 
     return (
-      <div className="App">
-        <h2>Favourites</h2>
-        <aside>
+      <div className="content-wrapper">
+        <aside className="sidebar card card--secondary">
+          <h2 className="card__title">Favourites</h2>
           <FavouritesList
             favourites={favourites}
             selectCity={this.selectCity}
           />
         </aside>
-        <main>
+        <main className="main-content card">
           <SearchForm fetchCityWeather={this.fetchCityWeather} />
           {mainContent}
         </main>

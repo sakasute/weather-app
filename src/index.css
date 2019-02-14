@@ -1,0 +1,23 @@
+/* 
+Set box-sizing to border-box for all elements (easier to calculate widths etc.) 
+Also set
+*/
+
+:root {
+  --almost-black: hsl(0, 0%, 10%);
+  --very-blue: hsl(221, 100%, 50%);
+  --less-blue: hsl(221, 100%, 85%);
+}
+
+html {
+  box-sizing: border-box;
+  font-size: 100%;
+  font-family: sans-serif;
+  color: var(--almost-black);
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}

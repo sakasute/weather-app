@@ -1,6 +1,8 @@
 import React from "react";
 import CityName from "../CityName/CityName";
 
+import "./CityPage.css";
+
 export default function CityPage({ data, isFavourite, toggleFavourite }) {
   const cityName = `${data.name}, ${data.sys.country}`;
   // add "+" sign in front of positive temperatures and round temps
