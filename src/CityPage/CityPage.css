@@ -35,3 +35,9 @@
 .city__fav-btn--remove {
   background-color: hsl(0, 100%, 40%);
 }
+
+.city__data-disclaimer {
+  position: relative;
+  bottom: -0.75rem;
+  font-size: 0.55rem;
+}

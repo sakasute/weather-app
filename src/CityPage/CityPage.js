@@ -20,8 +20,17 @@ export default function CityPage({ data, isFavourite, toggleFavourite }) {
       <button className={btnClasses} onClick={() => toggleFavourite(data.id)}>
         {btnText}
       </button>
-
       <h3 className="city__temp">{tempStr} &deg;C</h3>
+      <span className="city__data-disclaimer">
+        Weather data provided by{" "}
+        <a
+          href="https://openweathermap.org/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          OpenWeatherMap
+        </a>
+      </span>
     </section>
   );
 }
