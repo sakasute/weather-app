@@ -38,6 +38,15 @@ class App extends Component {
     };
   }
 
+  // Get the favourites from localStorage
+  componentDidMount() {
+    const favouritesStr = localStorage.getItem("favourites");
+    if (favouritesStr !== null) {
+      const favourites = JSON.parse(favouritesStr);
+      this.setState({ favourites });
+    }
+  }
+
   /* 
   Returns the OpenWeatherMap json-object for the city or boolean false if no
   such city was found.
@@ -114,27 +123,28 @@ class App extends Component {
     }
   }
 
+  /* 
+  Add a new favourite to the localStorage and to the state.
+  */
   addFavourite(cityId, cityName, countryCode) {
-    this.setState(prevState =>
-      update(prevState, {
-        favourites: {
-          [cityId]: {
-            $set: {
-              id: cityId,
-              name: cityName,
-              country: countryCode
-            }
-          }
-        }
-      })
-    );
+    const { favourites } = this.state;
+    const favouritesUpdated = update(favourites, {
+      [cityId]: { $set: { id: cityId, name: cityName, country: countryCode } }
+    });
+    localStorage.setItem("favourites", JSON.stringify(favouritesUpdated));
+
+    this.setState({ favourites: favouritesUpdated });
   }
 
+  /* 
+  Remove a favourite from the localStorage and from the state.
+  */
   removeFavourite(cityId) {
-    this.setState(prevState => {
-      delete prevState.favourites[cityId];
-      return prevState;
-    });
+    const { favourites } = this.state;
+    const favouritesUpdated = update(favourites, { $unset: [cityId] });
+    localStorage.setItem("favourites", JSON.stringify(favouritesUpdated));
+
+    this.setState({ favourites: favouritesUpdated });
   }
 
   render() {
