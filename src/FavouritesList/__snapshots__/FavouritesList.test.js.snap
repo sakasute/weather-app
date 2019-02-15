@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Favourites list renders correctly 1`] = `
+<ul
+  className="favourites"
+>
+  <li
+    className="favourites__item"
+    onClick={[Function]}
+  >
+    Helsinki, FI
+  </li>
+  <li
+    className="favourites__item"
+    onClick={[Function]}
+  >
+    Turku, FI
+  </li>
+</ul>
+`;
