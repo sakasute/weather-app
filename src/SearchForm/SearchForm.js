@@ -20,6 +20,7 @@ export default class SearchForm extends Component {
     const { fetchCityWeather } = this.props;
     const cityQueryArr = cityQuery.split(",");
 
+    // If a valid country code is given, use it in the search.
     if (cityQueryArr.length === 2) {
       fetchCityWeather(cityQueryArr[0].trim(), cityQueryArr[1].trim());
     } else {

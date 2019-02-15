@@ -16,7 +16,7 @@ The visual appearance was inspired by the site https://dev.to/
 
 1. Search for a city with the search bar.
 
-- Both, just a city name and a city name and two-letter country code separated by a comma works.
+- Both, just a city name and a city name and two-letter country code separated by a comma, work.
 - If just a city name is used, OpenWeatherMap gives you its first guess as result.
 - E.g. search "London" gives you "London, GB" but "London, US" gives you "London, US".
 
@@ -24,7 +24,7 @@ The visual appearance was inspired by the site https://dev.to/
 
 3. Now you can select a favourite city from the favourites list.
 
-## Not immeadiately clear features
+## Not immediately clear features
 
 - The app uses localStorage to save the user's favourites into the browser so they can be accessed after page reloads.
 - When selecting a city from favourites list, the app checks if the current locally saved data is under 60 minutes old. If so, new data is not fetched and the locally saved data is used.
@@ -52,7 +52,7 @@ Without it, the project crashes when trying to fetch weather data.
 
 ## Tests
 
-Testing, especially JS/React apps isn't very familiar to me but I did write a few simple tests. Tests are run with the command `npm test`. Most of the tests are in `App.test.js`-file but there is also one snapshot test in `FavouritesList/FavouritesList.test.js`-file.
+Testing, especially JS/React apps, isn't very familiar to me but I did write a few simple tests. Tests are run with the command `npm test`. Most of the tests are in `App.test.js`-file but there is also one snapshot test in `FavouritesList/FavouritesList.test.js`-file.
 
 The tests in ´App.test.js´-file are very basic. They mainly test that the main parts of the application are visible and that the search bar input works. The FavouritesList snapshot test tests that the favourites list rendering doesn't change unexpectedly.
 
@@ -62,7 +62,7 @@ I used `react-testing-library`, `jest-dom` and `react-test-renderer` in addition
 
 ## Bugs & Known issues
 
-- Search input isn't validated. This is mainly an UX issue because the actual security concerns would be on the server side and in this case the server is OpenWeatherMap's API-server.
+- Very little input validation is done (in search input). This is mainly an UX issue because the actual security concerns would mostly be on the server side and in this case the server is OpenWeatherMap's API-server.
 - UX is lacking in other ways also. Mainly there isn't any indication that a search is going on. So on slow internet connection the application seems frozen when waiting for the search result.
 - Doesn't work on Internet Explorer because `fetch` is used (at least because of that).
 - Especially, in a bigger application, it would have been beneficial to have more reusable and smaller components. This was a small enough project that there wasn't too much repetition with the abstraction level that I chose. Also PropTypes would have been beneficial, especially if the project was bigger.
@@ -71,7 +71,7 @@ I used `react-testing-library`, `jest-dom` and `react-test-renderer` in addition
 
 - Loading-spinner when waiting for results
 - Use browsers' location api to get current location for the initial page load.
-- A button to manually fetch up-to-date data.
+- A button to manually fetch up-to-date data. Also, show to the user, how old the data is (when OWM has last time updated their data).
 - Use URL-parameters to link directly to a given city's weather page.
 - Use for example https://websygen.github.io/owfont/ to show nice weather icons for the user (OWM has it's own icon set also, but they aren't very nice looking. The linked project uses the same naming scheme). Also, extract more descriptive weather info for the user from the API-response.
 - Sort/group the favourites list also by country (currently sorted alphabetically).
