@@ -59,7 +59,6 @@ class App extends Component {
     // adds country code to the query if it was given
     const cityQuery =
       countryCode.length === 2 ? `${cityName},${countryCode}` : cityName;
-    console.log(baseApiUrl + `&q=${cityQuery}`);
     fetch(baseApiUrl + `&q=${cityQuery}`)
       .then(res => res.json())
       .then(json => {
@@ -186,7 +185,10 @@ class App extends Component {
 
     return (
       <div className="content-wrapper">
-        <aside className="sidebar card card--secondary">
+        <aside
+          className="sidebar card card--secondary"
+          data-testid="favourites-sidebar"
+        >
           <h2 className="card__title">Favourites</h2>
           {favouritesEl}
         </aside>

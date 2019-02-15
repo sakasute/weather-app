@@ -30,7 +30,11 @@ export default class SearchForm extends Component {
     const { cityQuery } = this.state;
 
     return (
-      <form className="search" onSubmit={this.handleSubmit}>
+      <form
+        className="search"
+        onSubmit={this.handleSubmit}
+        data-testid="search-form"
+      >
         <label className="card__title search__label">
           Search for a city:
           <input
@@ -39,9 +43,15 @@ export default class SearchForm extends Component {
             value={cityQuery}
             placeholder={this.placeholderText}
             onChange={this.handleChange}
+            data-testid="search-input"
           />
         </label>
-        <input className="search__btn" type="submit" value="GO!" />
+        <input
+          className="search__btn"
+          type="submit"
+          value="GO!"
+          data-testid="search-btn"
+        />
       </form>
     );
   }
